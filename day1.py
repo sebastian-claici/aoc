@@ -1,11 +1,6 @@
-from collections import defaultdict
+from collections import Counter
 
-from aocd import data, submit
-
-
-def solve():
-    return 0
-
+from aocd import data
 
 lines = data.split("\n")
 xs = []
@@ -23,18 +18,12 @@ def p1(xs, ys):
     soln = 0
     for x, y in zip(xs, ys):
         soln += abs(x - y)
-    submit(str(soln))
+    return soln
 
 
 def p2(xs, ys):
-    counter = defaultdict(int)
-    for y in ys:
-        counter[y] += 1
-
+    counter = Counter(ys)
     soln = 0
     for x in xs:
         soln += x * counter[x]
-    submit(str(soln))
-
-
-p2(xs, ys)
+    return soln

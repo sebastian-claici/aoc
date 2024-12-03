@@ -20,18 +20,26 @@ def is_safe(nums):
     return inc or dec
 
 
-soln = 0
-for line in lines:
-    nums = [int(c) for c in line.split()]
-    if is_safe(nums):
-        soln += 1
-    else:
+def p1(lines):
+    soln = 0
+    for line in lines:
+        nums = [int(c) for c in line.split()]
+        if is_safe(nums):
+            soln += 1
+    return soln
+
+
+def p2(lines):
+    soln = 0
+    for line in lines:
+        nums = [int(c) for c in line.split()]
+        if is_safe(nums):
+            soln += 1
+            continue
         for i in range(0, len(nums)):
             nums_tmp = nums[:i] + nums[i + 1 :]
             if is_safe(nums_tmp):
                 soln += 1
                 break
 
-# submit(str(soln))
-
-# submit(str(soln))
+    return soln
