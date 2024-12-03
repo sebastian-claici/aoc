@@ -1,3 +1,4 @@
+import re
 from collections import Counter, defaultdict
 from functools import lru_cache
 from math import gcd, lcm
@@ -9,37 +10,24 @@ lines = data.split("\n")
 
 
 def is_safe(nums):
-    inc = True
-    for x, y in zip(nums, nums[1:]):
-        if not (y >= x and 1 <= (y - x) <= 3):
-            inc = False
-    dec = True
-    for x, y in zip(nums, nums[1:]):
-        if not (y <= x and 1 <= (x - y) <= 3):
-            dec = False
+    inc = all(1 <= y - x <= 3 for x, y in zip(nums, nums[1:]))
+    dec = all(1 <= x - y <= 3 for x, y in zip(nums, nums[1:]))
     return inc or dec
 
 
 def p1(lines):
-    soln = 0
-    for line in lines:
-        nums = [int(c) for c in line.split()]
-        if is_safe(nums):
-            soln += 1
-    return soln
+    nums = list(map(ints, lines))
+    return len(list(filter(is_safe, nums)))
 
 
 def p2(lines):
+    nums = map(ints, lines)
     soln = 0
-    for line in lines:
-        nums = [int(c) for c in line.split()]
-        if is_safe(nums):
+    for n in nums:
+        if any(is_safe(n[:i] + n[i + 1 :]) for i in range(len(n))):
             soln += 1
-            continue
-        for i in range(0, len(nums)):
-            nums_tmp = nums[:i] + nums[i + 1 :]
-            if is_safe(nums_tmp):
-                soln += 1
-                break
-
     return soln
+
+
+print(p1(lines))
+print(p2(lines))

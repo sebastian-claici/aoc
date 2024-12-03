@@ -5,6 +5,8 @@ from math import gcd, lcm
 
 from aocd import get_data, submit
 
+from utils import *
+
 data = get_data(day=3, year=2024)
 
 
