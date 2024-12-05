@@ -1,6 +1,6 @@
 import itertools
 import re
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, deque
 from functools import lru_cache
 from math import gcd, lcm
 
@@ -16,11 +16,13 @@ data = puzzle.input_data
 
 
 def split_pages(data):
-    after = defaultdict(set)
+    si = defaultdict(set)
+    pi = defaultdict(set)
     order, pages = data.split("\n\n")
     for line in order.split("\n"):
         x, y = ints(line)
-        after[x].add(y)
+        si[x].add(y)
+        pi[y].add(x)
 
     good_pages, bad_pages = [], []
     for line in pages.split("\n"):
@@ -28,35 +30,49 @@ def split_pages(data):
         good = True
         for i, num in enumerate(nums):
             for j in range(i):
-                if nums[j] in after[num]:
+                if nums[j] in si[num]:
                     good = False
         if good:
             good_pages.append(nums)
         else:
             bad_pages.append(nums)
 
-    return after, good_pages, bad_pages
+    return pi, si, good_pages, bad_pages
 
 
 def p1(data):
-    _, pages, _ = split_pages(data)
+    _, _, pages, _ = split_pages(data)
     soln = sum(p[len(p) // 2] for p in pages)
     return str(soln)
 
 
-def fix(nums, order):
-    for i, num in enumerate(nums):
-        for j in range(i):
-            if nums[j] in order[num]:
-                nums[i], nums[j] = nums[j], nums[i]
-                return fix(nums, order)
+def topo_sort(nums, parent, child):
+    nums = set(nums)
 
-    return nums[len(nums) // 2]
+    q = deque([])
+    degree = {}
+    for num in nums:
+        degree[num] = len(parent[num] & nums)
+    for num in nums:
+        if degree[num] == 0:
+            q.append(num)
+
+    result = []
+    while q:
+        num = q.popleft()
+        result.append(num)
+        for c in child[num] & nums:
+            degree[c] -= 1
+            if degree[c] == 0:
+                q.append(c)
+
+    return result[len(result) // 2]
 
 
 def p2(data):
-    after, _, pages = split_pages(data)
-    soln = sum(fix(page, after) for page in pages)
+    pi, si, _, pages = split_pages(data)
+
+    soln = sum(topo_sort(page, pi, si) for page in pages)
     return str(soln)
 
 
