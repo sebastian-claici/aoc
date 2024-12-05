@@ -53,7 +53,6 @@ def topo_sort(nums, parent, child):
     degree = {}
     for num in nums:
         degree[num] = len(parent[num] & nums)
-    for num in nums:
         if degree[num] == 0:
             q.append(num)
 
