@@ -45,47 +45,44 @@ def p1(data):
         else:
             q.append((x + dx, y + dy, idx))
 
-    return str(len(visited))
+    return visited
 
 
-def p2(data):
+def p2(data, orig_path):
     grid = data.split("\n")
     sx, sy = get_start(grid)
 
     soln = 0
-    for i in range(len(grid)):
-        for j in range(len(grid[0])):
-            if i == sx and j == sy:
-                continue
-            if grid[i][j] == "#":
-                continue
+    for i, j in orig_path:
+        if i == sx and j == sy:
+            continue
 
-            visited = set([])
-            idx = 0
-            q = deque([(sx, sy, idx)])
-            while q:
-                x, y, idx = q.popleft()
-                dx, dy = adj[idx]
-                if (x, y, idx) in visited:
-                    soln += 1
-                    break
-                visited.add((x, y, idx))
-                if not (0 <= x + dx < len(grid) and 0 <= y + dy < len(grid[0])):
-                    break
-                if grid[x + dx][y + dy] == "#" or (x + dx == i and y + dy == j):
-                    idx = (idx + 1) % len(adj)
-                    q.append((x, y, idx))
-                else:
-                    q.append((x + dx, y + dy, idx))
+        visited = set([])
+        idx = 0
+        q = deque([(sx, sy, idx)])
+        while q:
+            x, y, idx = q.popleft()
+            dx, dy = adj[idx]
+            if (x, y, idx) in visited:
+                soln += 1
+                break
+            visited.add((x, y, idx))
+            if not (0 <= x + dx < len(grid) and 0 <= y + dy < len(grid[0])):
+                break
+            if grid[x + dx][y + dy] == "#" or (x + dx == i and y + dy == j):
+                idx = (idx + 1) % len(adj)
+                q.append((x, y, idx))
+            else:
+                q.append((x + dx, y + dy, idx))
 
     return str(soln)
 
 
-p1_s = p1(data)
-p2_s = p2(data)
-if p1_s != "":
-    print(p1_s)
-    puzzle.answer_a = p1_s
+visited = p1(data)
+print(len(visited))
+puzzle.answer_a = str(len(visited))
+
+p2_s = p2(data, visited)
 if p2_s != "":
     print(p2_s)
     puzzle.answer_b = p2_s
