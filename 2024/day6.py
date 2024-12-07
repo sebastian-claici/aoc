@@ -78,11 +78,54 @@ def p2(data, orig_path):
     return str(soln)
 
 
-visited = p1(data)
-print(len(visited))
-puzzle.answer_a = str(len(visited))
+def is_cycle(grid, idx, d='^'):
+    d_map = {'^': '>', '>': 'v', 'v': '<', '<': '^'}
+    d_adj = {'^': (-1, 0), '>': (0, 1), 'v': (1, 0), '<': (0, -1)}
 
-p2_s = p2(data, visited)
-if p2_s != "":
-    print(p2_s)
-    puzzle.answer_b = p2_s
+    def get_next(grid, idx, d):
+        n, m = len(grid), len(grid[0])
+        x, y = idx
+        if not (0 <= x < n and 0 <= y < m):
+            return None
+        return grid[x][y]
+
+    history = set((idx, d))
+    while True:
+        match get_next(grid, idx, d):
+            case '#':
+                d = d_map[d]
+            case '.':
+                dx, dy = d_adj[d]
+                idx = (idx[0] + dx, idx[1] + dy)
+            case None:
+                return False
+        if (idx, d) in history:
+            return True
+        history.add((idx, d))
+
+
+grid = [[c for c in line.strip()] for line in data]
+n, m = len(grid), len(grid[0])
+sx, sy = -1, -1
+for x in range(n):
+    for y in range(m):
+        if grid[x][y] == '^':
+            sx, sy = x, y
+
+cycles = 0
+for x in range(n):
+    for y in range(m):
+        if grid[x][y] == '#' or grid[x][y] == '^':
+            continue
+        grid[x][y] = '#'
+        cycles += is_cycle(grid, (sx, sy))
+        grid[x][y] = '.'
+print(cycles)
+#visited = p1(data)
+#print(len(visited))
+#puzzle.answer_a = str(len(visited))
+
+#p2_s = p2(data, visited)
+#if p2_s != "":
+#    print(p2_s)
+#    puzzle.answer_b = p2_s
