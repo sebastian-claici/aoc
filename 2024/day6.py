@@ -78,54 +78,53 @@ def p2(data, orig_path):
     return str(soln)
 
 
-def is_cycle(grid, idx, d='^'):
-    d_map = {'^': '>', '>': 'v', 'v': '<', '<': '^'}
-    d_adj = {'^': (-1, 0), '>': (0, 1), 'v': (1, 0), '<': (0, -1)}
+def is_cycle(grid, idx, d="^"):
+    d_map = {"^": ">", ">": "v", "v": "<", "<": "^"}
+    d_adj = {"^": (-1, 0), ">": (0, 1), "v": (1, 0), "<": (0, -1)}
 
     def get_next(grid, idx, d):
         n, m = len(grid), len(grid[0])
         x, y = idx
-        if not (0 <= x < n and 0 <= y < m):
+        dx, dy = d_adj[d]
+        if not (0 <= x + dx < n and 0 <= y + dy < m):
             return None
-        return grid[x][y]
+        return grid[x + dx][y + dy]
 
-    history = set((idx, d))
+    history = set()
     while True:
+        history.add((idx, d))
         match get_next(grid, idx, d):
-            case '#':
+            case "#":
                 d = d_map[d]
-            case '.':
+            case ".":
                 dx, dy = d_adj[d]
                 idx = (idx[0] + dx, idx[1] + dy)
-            case None:
+            case _:
                 return False
         if (idx, d) in history:
             return True
-        history.add((idx, d))
 
 
-grid = [[c for c in line.strip()] for line in data]
+grid = [[c for c in line.strip()] for line in data.split("\n")]
 n, m = len(grid), len(grid[0])
-sx, sy = -1, -1
-for x in range(n):
-    for y in range(m):
-        if grid[x][y] == '^':
-            sx, sy = x, y
+sx, sy = get_start(grid)
 
+grid[sx][sy] = "."
 cycles = 0
 for x in range(n):
     for y in range(m):
-        if grid[x][y] == '#' or grid[x][y] == '^':
+        if grid[x][y] == "#" or (x == sx and y == sy):
             continue
-        grid[x][y] = '#'
+        grid[x][y] = "#"
         cycles += is_cycle(grid, (sx, sy))
-        grid[x][y] = '.'
+        grid[x][y] = "."
 print(cycles)
-#visited = p1(data)
-#print(len(visited))
-#puzzle.answer_a = str(len(visited))
 
-#p2_s = p2(data, visited)
-#if p2_s != "":
+# visited = p1(data)
+# print(len(visited))
+# puzzle.answer_a = str(len(visited))
+
+# p2_s = p2(data, visited)
+# if p2_s != "":
 #    print(p2_s)
 #    puzzle.answer_b = p2_s
