@@ -78,53 +78,11 @@ def p2(data, orig_path):
     return str(soln)
 
 
-def is_cycle(grid, idx, d="^"):
-    d_map = {"^": ">", ">": "v", "v": "<", "<": "^"}
-    d_adj = {"^": (-1, 0), ">": (0, 1), "v": (1, 0), "<": (0, -1)}
+visited = p1(data)
+print(len(visited))
+puzzle.answer_a = str(len(visited))
 
-    def get_next(grid, idx, d):
-        n, m = len(grid), len(grid[0])
-        x, y = idx
-        dx, dy = d_adj[d]
-        if not (0 <= x + dx < n and 0 <= y + dy < m):
-            return None
-        return grid[x + dx][y + dy]
-
-    history = set()
-    while True:
-        history.add((idx, d))
-        match get_next(grid, idx, d):
-            case "#":
-                d = d_map[d]
-            case ".":
-                dx, dy = d_adj[d]
-                idx = (idx[0] + dx, idx[1] + dy)
-            case _:
-                return False
-        if (idx, d) in history:
-            return True
-
-
-grid = [[c for c in line.strip()] for line in data.split("\n")]
-n, m = len(grid), len(grid[0])
-sx, sy = get_start(grid)
-
-grid[sx][sy] = "."
-cycles = 0
-for x in range(n):
-    for y in range(m):
-        if grid[x][y] == "#" or (x == sx and y == sy):
-            continue
-        grid[x][y] = "#"
-        cycles += is_cycle(grid, (sx, sy))
-        grid[x][y] = "."
-print(cycles)
-
-# visited = p1(data)
-# print(len(visited))
-# puzzle.answer_a = str(len(visited))
-
-# p2_s = p2(data, visited)
-# if p2_s != "":
-#    print(p2_s)
-#    puzzle.answer_b = p2_s
+p2_s = p2(data, visited)
+if p2_s != "":
+    print(p2_s)
+    puzzle.answer_b = p2_s
