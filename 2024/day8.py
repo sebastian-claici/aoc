@@ -20,9 +20,9 @@ for i in range(n):
 
 
 antinodes = set()
-for c, pos in positions.items():
+for _, pos in positions.items():
     for i, p in enumerate(pos):
-        for j, q in enumerate(pos[i + 1 :]):
+        for q in pos[i + 1 :]:
             dr = q - p
             for dir in (dr, -dr):
                 pm = p
