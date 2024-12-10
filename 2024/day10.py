@@ -1,11 +1,5 @@
-import itertools
-import re
-from collections import Counter, defaultdict, deque
-from copy import deepcopy
-from functools import lru_cache
-from math import gcd, lcm
+from collections import deque
 
-import numpy as np
 from aocd.models import Puzzle
 
 puzzle = Puzzle(year=2024, day=10)
