@@ -12,6 +12,7 @@ numpy = "^2.1.3"
 pandas = "^2.2.3"
 sympy = "^1.13.3"
 advent-of-code-data = "^2.0.4"
+cvxpy = "^1.6.0"
 
 
 [build-system]
