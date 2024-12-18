@@ -12,16 +12,16 @@ sx, sy = 0, 0
 ex, ey = 0, 0
 for x, line in enumerate(grid):
     for y, c in enumerate(line):
-        if c == 'S':
+        if c == "S":
             sx, sy = x, y
-        elif c == 'E':
+        elif c == "E":
             ex, ey = x, y
 
 
 def dijkstra(grid, sx, sy):
     n, m = len(grid), len(grid[0])
 
-    dist = defaultdict(lambda: float('inf'))
+    dist = defaultdict(lambda: float("inf"))
     prev = defaultdict(list)
     dist[(sx, sy, 0, 1)] = 0
     q = [(0, (sx, sy, 0, 1))]
@@ -43,7 +43,7 @@ def dijkstra(grid, sx, sy):
         npx, npy = px + dx, py + dy
         if not (0 <= npx < n and 0 <= npy < m):
             continue
-        if grid[npx][npy] == '#':
+        if grid[npx][npy] == "#":
             continue
 
         if dist[(npx, npy, dx, dy)] == d + 1:

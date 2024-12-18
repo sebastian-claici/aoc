@@ -6,8 +6,10 @@ from aocd.models import Puzzle
 puzzle = Puzzle(year=2024, day=14)
 data = puzzle.input_data
 
+
 def ints(line: str):
     return [int(x) for x in re.findall(r"-?\d+", line)]
+
 
 def simulate(robot, grid_x=101, grid_y=103, secs=100):
     px, py, vx, vy = robot
@@ -24,9 +26,9 @@ def simulate(robot, grid_x=101, grid_y=103, secs=100):
 
 
 def display(robots, grid_x=101, grid_y=103):
-    grid = [['.' for _ in range(grid_x)] for _ in range(grid_y)]
-    for (px, py, _, _) in robots:
-        grid[py][px] = 'x'
+    grid = [["." for _ in range(grid_x)] for _ in range(grid_y)]
+    for px, py, _, _ in robots:
+        grid[py][px] = "x"
     for line in grid:
         print("".join(line))
 
@@ -36,7 +38,7 @@ robots = []
 for line in data.split("\n"):
     px, py, vx, vy = ints(line)
     robots.append((px, py, vx, vy))
-    quad = simulate((px, py, vx, vy), 101, 103) 
+    quad = simulate((px, py, vx, vy), 101, 103)
     if quad != -1:
         ans[quad] += 1
 

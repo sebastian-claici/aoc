@@ -19,6 +19,7 @@ n, m = len(grid), len(grid[0])
 visited = set()
 adj = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
+
 def dfs(node, plants):
     visited.add(node)
     plants.append(node)
@@ -45,9 +46,12 @@ for x in range(n):
         dfs((x, y), plants)
         area = len(plants)
         boundaries = []
-        for (nx, ny) in plants:
+        for nx, ny in plants:
             for dx, dy in adj:
-                if not (0 <= nx + dx < n and 0 <= ny + dy < m) or grid[nx + dx][ny + dy] != grid[nx][ny]:
+                if (
+                    not (0 <= nx + dx < n and 0 <= ny + dy < m)
+                    or grid[nx + dx][ny + dy] != grid[nx][ny]
+                ):
                     boundaries.append((nx + dx + (ny + dy) * 1j, dx + dy * 1j))
         perim = len(boundaries)
         p1_soln += area * perim
