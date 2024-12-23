@@ -1,4 +1,3 @@
-import re
 import sys
 from collections import defaultdict, deque
 from functools import cache
@@ -8,13 +7,11 @@ from aocd.models import Puzzle
 sys.setrecursionlimit(1000000)
 
 
-def ints(line: str):
-    return [int(x) for x in re.findall(r"-?\d+", line)]
-
-
 puzzle = Puzzle(year=2024, day=21)
 data = puzzle.input_data
 
+
+num_robots = 26
 directional = [[None, "^", "A"], ["<", "v", ">"]]
 numeric = [["7", "8", "9"], ["4", "5", "6"], ["1", "2", "3"], [None, "0", "A"]]
 
@@ -74,9 +71,6 @@ def find_paths(paths, path, prev, x, y):
         path.append(dir)
         find_paths(paths, path, prev, px, py)
         path.pop()
-
-
-num_robots = 26
 
 
 @cache
